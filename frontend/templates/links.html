@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="section-title">Useful Links</h2>
+    <ul class="useful-links" style="list-style: none; padding: 0;">
+        {% for link in links %}
+        <li style="margin-bottom: 1rem;">
+            <a href="{{ link.url }}" target="_blank" style="text-decoration: none; color: var(--primary); font-size: 1.2rem;">
+                {% if link.icon %}<i class="{{ link.icon }}"></i>{% endif %}
+                {{ link.title }}
+            </a>
+        </li>
+        {% else %}
+        <li>No links available.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

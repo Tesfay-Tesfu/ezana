@@ -1,0 +1,118 @@
+<!-- FOOTER - Four columns, with both dynamic and static social media links -->
+<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <!-- Column 1: Useful Links + FAQ -->
+            <div class="col-md-3 mb-4">
+                <h5>Useful Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('index') }}" class="text-white-50 text-decoration-none">Home</a></li>
+                    <li><a href="{{ url_for('index') }}#about" class="text-white-50 text-decoration-none">About Us</a></li>
+                    <li><a href="{{ url_for('services') }}" class="text-white-50 text-decoration-none">Services</a></li>
+                    <li><a href="{{ url_for('index') }}#contact" class="text-white-50 text-decoration-none">Contact</a></li>
+                    <li><a href="{{ url_for('faq') }}" class="text-white-50 text-decoration-none">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <!-- Column 2: Policies -->
+            <div class="col-md-3 mb-4">
+                <h5>Policies</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('policies', type='privacy') }}" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
+                    <li><a href="{{ url_for('policies', type='terms') }}" class="text-white-50 text-decoration-none">Terms & Conditions</a></li>
+                    <li><a href="{{ url_for('policies', type='cancellation') }}" class="text-white-50 text-decoration-none">Cancellation Policy</a></li>
+                    <li><a href="{{ url_for('policies', type='cookie') }}" class="text-white-50 text-decoration-none">Cookie Policy</a></li>
+                </ul>
+            </div>
+            
+            <!-- Column 3: Contact Info - DYNAMIC from settings -->
+            <div class="col-md-3 mb-4">
+                <h5>Contact</h5>
+                <ul class="list-unstyled text-white-50">
+                    <li><i class="fas fa-map-marker-alt me-2"></i> {{ settings.address }}</li>
+                    <li><i class="fas fa-phone me-2"></i> {{ settings.phone }}</li>
+                    <li><i class="fas fa-envelope me-2"></i> {{ settings.email }}</li>
+                    <li><i class="fas fa-clock me-2"></i> {{ settings.business_hours }}</li>
+                </ul>
+            </div>
+            
+            <!-- Column 4: Social Media + Newsletter -->
+            <div class="col-md-3 mb-4">
+                <h5>Follow Us</h5>
+                <div class="social-icons mb-3">
+                    <!-- Static social media links (always visible) -->
+                    <a href="https://www.facebook.com/share/1K48egkVLT/" target="_blank" class="text-white me-3 fs-4">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com/p/CxRJI8MI5kL/?img_index=1&igsh=MTJyeDN3dWUyemV0Zw==" target="_blank" class="text-white me-3 fs-4">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-white me-3 fs-4">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@evayordi1?_r=1&_t=ZG-93aiKt1AGGX" target="_blank" class="text-white me-3 fs-4">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://youtube.com/@yordibeauty-w3k?si=gnVylZO_gh-B_cNQ" target="_blank" class="text-white me-3 fs-4">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    
+                    <!-- Optional: Also show dynamic social media links if they exist and are different -->
+                    {% if settings.get('social_facebook') and settings.get('social_facebook') not in ['https://www.facebook.com/share/1K48egkVLT/'] %}
+                    <a href="{{ settings.get('social_facebook') }}" target="_blank" class="text-white me-3 fs-4" title="Facebook (Admin)">
+                        <i class="fab fa-facebook"></i><small class="text-muted">*</small>
+                    </a>
+                    {% endif %}
+                    {% if settings.get('social_instagram') and settings.get('social_instagram') not in ['https://www.instagram.com/p/CxRJI8MI5kL/?img_index=1&igsh=MTJyeDN3dWUyemV0Zw=='] %}
+                    <a href="{{ settings.get('social_instagram') }}" target="_blank" class="text-white me-3 fs-4" title="Instagram (Admin)">
+                        <i class="fab fa-instagram"></i><small class="text-muted">*</small>
+                    </a>
+                    {% endif %}
+                    {% if settings.get('social_linkedin') %}
+                    <a href="{{ settings.get('social_linkedin') }}" target="_blank" class="text-white me-3 fs-4" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    {% endif %}
+                    {% if settings.get('social_tiktok') and settings.get('social_tiktok') not in ['https://www.tiktok.com/@evayordi1?_r=1&_t=ZG-93aiKt1AGGX'] %}
+                    <a href="{{ settings.get('social_tiktok') }}" target="_blank" class="text-white me-3 fs-4" title="TikTok (Admin)">
+                        <i class="fab fa-tiktok"></i><small class="text-muted">*</small>
+                    </a>
+                    {% endif %}
+                    {% if settings.get('social_youtube') and settings.get('social_youtube') not in ['https://youtube.com/@yordibeauty-w3k?si=gnVylZO_gh-B_cNQ'] %}
+                    <a href="{{ settings.get('social_youtube') }}" target="_blank" class="text-white me-3 fs-4" title="YouTube (Admin)">
+                        <i class="fab fa-youtube"></i><small class="text-muted">*</small>
+                    </a>
+                    {% endif %}
+                    {% if settings.get('social_twitter') %}
+                    <a href="{{ settings.get('social_twitter') }}" target="_blank" class="text-white me-3 fs-4" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                
+                <!-- Newsletter Form -->
+                <div class="mt-3">
+                    <p class="mb-2">Subscribe to our newsletter</p>
+                    <form action="{{ url_for('subscribe') }}" method="POST">
+                        <div class="input-group">
+                            <input type="email" name="email" class="form-control form-control-sm" placeholder="Your email" required>
+                            <button type="submit" class="btn btn-primary btn-sm">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="row mt-4 pt-3 border-top border-secondary">
+            <div class="col-md-8">
+                <p class="mb-0">&copy; 2026 {{ settings.company_name }}. All rights reserved.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <p class="mb-0 text-white-50">
+                    Developed by <a href="mailto:tesfayphysics@gmail.com" class="text-white text-decoration-none">Tesfay Y.</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

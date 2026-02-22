@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.env
+venv/
+env/
+ENV/
+backend/venv/
+
+# Database
+*.db
+*.db-bak
+*.db-journal
+instance/*.db
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+*.ipynb_backup/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Uploads (but keep the folder)
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
+frontend/static/uploads/*
+!frontend/static/uploads/.gitkeep
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Deployment backups
+*.bak
+*.backup
+
+# Temporary files
+tmp/
+temp/
+cleanup.py
+check_structure.py
+backend/.env
+backend/.env.*

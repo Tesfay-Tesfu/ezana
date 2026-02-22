@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="section-title">Our Services</h2>
+    <div class="services-container">
+        {% for service in services %}
+        <div class="service-box">
+            {% if service.image_url %}
+            <div class="service-image" style="background-image: url('{{ service.image_url }}');"></div>
+            {% endif %}
+            <div class="box-header" style="background: linear-gradient(to right, {{ service.box_color or '#2E8B57' }}, #228B22);">
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.subtitle }}</p>
+            </div>
+            <div class="box-content">
+                {% if service.description %}
+                <p class="text-muted mb-3">{{ service.description }}</p>
+                {% endif %}
+                
+                {% if service.features %}
+                <h5 class="mb-3" style="color: var(--gold);">Features:</h5>
+                <ul class="service-features-list">
+                    {% for feature in service.features %}
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ feature }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('booking') }}" class="btn btn-sm" style="background: var(--gold); color: #000;">
+                        Book This Service
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center">
+            <p class="lead">No services available yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

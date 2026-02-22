@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">{{ type|capitalize }} Policy</h2>
+    <div class="card">
+        <div class="card-body">
+            {% if policy %}
+                {{ policy.content|safe }}
+            {% else %}
+                <p class="text-muted">No policy content available.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="mt-4">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

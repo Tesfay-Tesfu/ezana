@@ -1,0 +1,66 @@
+
+{% extends "admin/admin_base.html" %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Manage FAQs</h1>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Add New FAQ</h5>
+        <form method="POST" action="{{ url_for('admin_faq_new') }}">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.question.label(class="form-label") }}
+                {{ form.question(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.answer.label(class="form-label") }}
+                {{ form.answer(class="form-control", rows=3) }}
+            </div>
+            <div class="mb-3">
+                {{ form.display_order.label(class="form-label") }}
+                {{ form.display_order(class="form-control") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Add FAQ</button>
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for faq in faqs %}
+        <tr>
+            <td>{{ faq.display_order }}</td>
+            <td>{{ faq.question }}</td>
+            <td>{{ faq.answer[:100] }}{% if faq.answer|length > 100 %}...{% endif %}</td>
+            <td>
+                <a href="{{ url_for('admin_faq_edit', id=faq.id) }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <form action="{{ url_for('admin_faq_delete', id=faq.id) }}" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this FAQ?')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-center">No FAQs yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

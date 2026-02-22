@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Admin Sidebar -->
+        <nav class="col-md-2 d-md-block bg-dark text-white p-3" style="min-height: 100vh; height: 100vh; overflow-y: auto; position: sticky; top: 0;">
+            <h4 class="text-center mb-4">Admin Panel</h4>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link text-white {% if request.endpoint == 'admin_dashboard' %}active bg-primary{% endif %}">
+                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_services') }}" class="nav-link text-white {% if request.endpoint == 'admin_services' %}active bg-primary{% endif %}">
+                        <i class="fas fa-cogs me-2"></i> Services
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_bookings') }}" class="nav-link text-white {% if request.endpoint == 'admin_bookings' %}active bg-primary{% endif %}">
+                        <i class="fas fa-calendar-check me-2"></i> Bookings
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_reviews') }}" class="nav-link text-white {% if request.endpoint == 'admin_reviews' %}active bg-primary{% endif %}">
+                        <i class="fas fa-star me-2"></i> Reviews
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_faqs') }}" class="nav-link text-white {% if request.endpoint == 'admin_faqs' %}active bg-primary{% endif %}">
+                        <i class="fas fa-question-circle me-2"></i> FAQs
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_policies') }}" class="nav-link text-white {% if request.endpoint == 'admin_policies' %}active bg-primary{% endif %}">
+                        <i class="fas fa-file-alt me-2"></i> Policies
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_links') }}" class="nav-link text-white {% if request.endpoint == 'admin_links' %}active bg-primary{% endif %}">
+                        <i class="fas fa-link me-2"></i> Useful Links
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_blocked_dates') }}" class="nav-link text-white {% if request.endpoint == 'admin_blocked_dates' %}active bg-primary{% endif %}">
+                        <i class="fas fa-calendar-times me-2"></i> Blocked Dates
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_hero_slides') }}" class="nav-link text-white {% if request.endpoint == 'admin_hero_slides' %}active bg-primary{% endif %}">
+                        <i class="fas fa-images me-2"></i> Hero Slides
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_social_media') }}" class="nav-link text-white {% if request.endpoint == 'admin_social_media' %}active bg-primary{% endif %}">
+                        <i class="fas fa-share-alt me-2"></i> Social Media
+                    </a>
+                </li>
+                <!-- NEW: Contact Info Link -->
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_contact_settings') }}" class="nav-link text-white {% if request.endpoint == 'admin_contact_settings' %}active bg-primary{% endif %}">
+                        <i class="fas fa-address-book me-2"></i> Contact Info
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{{ url_for('admin_settings') }}" class="nav-link text-white {% if request.endpoint == 'admin_settings' %}active bg-primary{% endif %}">
+                        <i class="fas fa-cog me-2"></i> Settings
+                    </a>
+                </li>
+                <li class="nav-item mt-4">
+                    <a href="{{ url_for('admin_logout') }}" class="nav-link text-white-50">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-md-4 py-4">
+            {% block admin_content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}

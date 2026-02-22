@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="booking-section">
+    <div class="container booking-container">
+        <h2 class="section-title">Service Booking Form</h2>
+        
+        <!-- Display blocked dates notice -->
+        {% if blocked_dates and blocked_dates|length > 0 %}
+        <div class="alert alert-info mb-4">
+            <strong><i class="fas fa-info-circle"></i> Unavailable Dates:</strong>
+            <div class="mt-2">
+                {% for date in blocked_dates %}
+                    <span class="badge bg-secondary me-1 mb-1">{{ date }}</span>
+                {% endfor %}
+            </div>
+            <small class="text-muted">These dates are blocked and cannot be selected.</small>
+        </div>
+        {% endif %}
+        
+        <form method="POST" id="bookingForm">
+            {{ form.hidden_tag() }}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        {{ form.full_name.label(class="form-label fw-bold") }}
+                        {{ form.full_name(class="form-control" + (' is-invalid' if form.full_name.errors else ''), placeholder="Enter your full name") }}
+                        {% for error in form.full_name.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        {{ form.email.label(class="form-label fw-bold") }}
+                        {{ form.email(class="form-control" + (' is-invalid' if form.email.errors else ''), placeholder="your@email.com") }}
+                        {% for error in form.email.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        {{ form.phone.label(class="form-label fw-bold") }}
+                        {{ form.phone(class="form-control" + (' is-invalid' if form.phone.errors else ''), placeholder="Your phone number") }}
+                        {% for error in form.phone.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        {{ form.event_date.label(class="form-label fw-bold") }}
+                        <input type="date" 
+                               name="event_date" 
+                               class="form-control {% if form.event_date.errors %}is-invalid{% endif %}" 
+                               id="event_date"
+                               value="{{ form.event_date.data.strftime('%Y-%m-%d') if form.event_date.data else '' }}"
+                               min="{{ now().strftime('%Y-%m-%d') }}">
+                        {% for error in form.event_date.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PROFESSIONAL SERVICE SELECTION - Grid with checkboxes -->
+            <div class="form-group mb-4">
+                <label class="form-label fw-bold fs-5 mb-3">
+                    <i class="fas fa-concierge-bell me-2" style="color: var(--gold);"></i>
+                    Select Services <span class="text-danger">*</span>
+                </label>
+                
+                {% if form.services.errors %}
+                <div class="alert alert-danger py-2">
+                    {% for error in form.services.errors %}
+                        <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="services-grid">
+                    {% for value, label in form.services.choices %}
+                    <div class="service-checkbox-item">
+                        <input type="checkbox" 
+                               name="services" 
+                               value="{{ value }}" 
+                               id="service_{{ loop.index }}"
+                               class="service-checkbox"
+                               {% if form.services.data and value in form.services.data %}checked{% endif %}>
+                        <label for="service_{{ loop.index }}" class="service-checkbox-label">
+                            <span class="service-name">{{ label }}</span>
+                            <span class="checkmark">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <small class="form-text text-muted mt-2">
+                    <i class="fas fa-info-circle me-1"></i> Select one or more services you need
+                </small>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        {{ form.guest_count.label(class="form-label fw-bold") }}
+                        {{ form.guest_count(class="form-control" + (' is-invalid' if form.guest_count.errors else ''), placeholder="Number of guests") }}
+                        {% for error in form.guest_count.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group mb-4">
+                {{ form.message.label(class="form-label fw-bold") }}
+                {{ form.message(class="form-control" + (' is-invalid' if form.message.errors else ''), rows=5, placeholder="Any special requests or additional information...") }}
+                {% for error in form.message.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg px-5" style="background: var(--gold); color: #000; border: none;">
+                    <i class="fas fa-paper-plane me-2"></i> Submit Booking Request
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Add Flatpickr for better date picking -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const blockedDates = {{ blocked_dates|tojson }};
+    const dateInput = document.getElementById('event_date');
+    const checkboxes = document.querySelectorAll('.service-checkbox');
+    
+    // Add selected count display
+    function updateSelectedCount() {
+        const selected = document.querySelectorAll('.service-checkbox:checked').length;
+        let countDisplay = document.querySelector('.selected-count');
+        
+        if (!countDisplay) {
+            const label = document.querySelector('.form-label.fw-bold.fs-5');
+            if (label) {
+                countDisplay = document.createElement('span');
+                countDisplay.className = 'selected-count';
+                label.appendChild(countDisplay);
+            }
+        }
+        
+        if (countDisplay) {
+            countDisplay.textContent = selected + ' selected';
+            countDisplay.style.display = selected > 0 ? 'inline-block' : 'none';
+        }
+    }
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+    
+    // Initial update
+    updateSelectedCount();
+    
+    // Initialize flatpickr
+    if (dateInput) {
+        flatpickr(dateInput, {
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            disable: blockedDates,
+            onChange: function(selectedDates, dateStr, instance) {
+                if (blockedDates.includes(dateStr)) {
+                    instance.clear();
+                    alert('This date is blocked. Please choose another date.');
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

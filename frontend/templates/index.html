@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Hero Carousel - Dynamic from Database -->
+<section class="hero" id="home">
+    <div class="carousel-container">
+        <div class="carousel-slide">
+            {% for slide in hero_slides %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}" 
+                 style="background-image: url('{{ slide.image_url }}');"
+                 data-title="{{ slide.title }}"
+                 data-subtitle="{{ slide.subtitle }}"
+                 data-button-text="{{ slide.button_text }}"
+                 data-button-link="{{ slide.button_link }}">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="carousel-overlay">
+            {% if hero_slides %}
+            <h1 id="hero-title">{{ hero_slides[0].title }}</h1>
+            <p id="hero-subtitle">{{ hero_slides[0].subtitle }}</p>
+            <a href="{{ hero_slides[0].button_link }}" class="btn" id="hero-button">{{ hero_slides[0].button_text }}</a>
+            {% else %}
+            <h1 id="hero-title">Experience Authentic Cultural Events</h1>
+            <p id="hero-subtitle">Ezana Service brings you the finest diversified services</p>
+            <a href="{{ url_for('booking') }}" class="btn" id="hero-button">Book Our Services</a>
+            {% endif %}
+        </div>
+        <button class="carousel-control prev">&lsaquo;</button>
+        <button class="carousel-control next">&rsaquo;</button>
+    </div>
+</section>
+
+<!-- Services Sections -->
+<section class="container" id="services">
+    <h2 class="section-title">OUR SERVICES</h2>
+    <div class="services-container">
+        {% for service in services %}
+        <div class="service-box">
+            {% if service.image_url %}
+            <div class="service-image" style="background-image: url('{{ service.image_url }}');"></div>
+            {% endif %}
+            <div class="box-header" style="background: linear-gradient(to right, {{ service.box_color or '#2E8B57' }}, #228B22);">
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.subtitle }}</p>
+            </div>
+            <div class="box-content">
+                {% if service.features %}
+                <ul class="service-features-list">
+                    {% for feature in service.features %}
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>{{ feature }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('booking') }}" class="btn btn-sm" style="background: var(--gold); color: #000;">
+                        Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="why-section" id="why">
+    <div class="container">
+        <h2 class="section-title">Why Choose Ezana Services?</h2>
+        <div class="why-content">
+            <p>Ezana Services is dedicated to preserving and sharing the rich cultural heritage of Ethiopia through authentic experiences, traditional ceremonies, and cultural education services.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contact">
+    <div class="container contact-container">
+        <div class="contact-info">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <div class="contact-details">
+                    <h3>Email</h3>
+                    <p>{{ settings.email }}</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <div class="contact-details">
+                    <h3>Phone</h3>
+                    <p>{{ settings.phone }}</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="contact-details">
+                    <h3>Address</h3>
+                    <p>{{ settings.address }}</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-clock"></i>
+                <div class="contact-details">
+                    <h3>Business Hours</h3>
+                    <p>{{ settings.business_hours }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="map-container">
+            <h3>Find Us</h3>
+            <div class="map-embed">
+                <iframe 
+                    src="{{ settings.map_embed_url }}" 
+                    width="100%" 
+                    height="300" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Update carousel overlay text when slide changes
+document.addEventListener('DOMContentLoaded', function() {
+    const items = document.querySelectorAll('.carousel-item');
+    const titleEl = document.getElementById('hero-title');
+    const subtitleEl = document.getElementById('hero-subtitle');
+    const buttonEl = document.getElementById('hero-button');
+    let currentIndex = 0;
+    let interval;
+    
+    function updateOverlay(index) {
+        const activeItem = items[index];
+        if (activeItem) {
+            titleEl.textContent = activeItem.dataset.title || 'Experience Authentic Cultural Events';
+            subtitleEl.textContent = activeItem.dataset.subtitle || 'Ezana Service brings you the finest diversified services';
+            buttonEl.textContent = activeItem.dataset.buttonText || 'Book Now';
+            buttonEl.href = activeItem.dataset.buttonLink || '/booking';
+        }
+    }
+    
+    function nextSlide() {
+        items[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % items.length;
+        items[currentIndex].classList.add('active');
+        updateOverlay(currentIndex);
+    }
+    
+    function prevSlide() {
+        items[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        items[currentIndex].classList.add('active');
+        updateOverlay(currentIndex);
+    }
+    
+    function startAutoSlide() {
+        interval = setInterval(nextSlide, 5000);
+    }
+    
+    function stopAutoSlide() {
+        clearInterval(interval);
+    }
+    
+    // Override the next/prev buttons
+    const prevBtn = document.querySelector('.carousel-control.prev');
+    const nextBtn = document.querySelector('.carousel-control.next');
+    
+    if (prevBtn && nextBtn && items.length > 0) {
+        prevBtn.addEventListener('click', function() {
+            prevSlide();
+            stopAutoSlide();
+            startAutoSlide();
+        });
+        
+        nextBtn.addEventListener('click', function() {
+            nextSlide();
+            stopAutoSlide();
+            startAutoSlide();
+        });
+        
+        // Start auto-slide
+        startAutoSlide();
+        
+        // Pause on hover
+        const carousel = document.querySelector('.carousel-container');
+        carousel.addEventListener('mouseenter', stopAutoSlide);
+        carousel.addEventListener('mouseleave', startAutoSlide);
+    }
+});
+</script>
+{% endblock %}
+
+<!-- Contact Section - UPDATED with dynamic settings -->
+<section class="contact-section" id="contact">
+    <div class="container contact-container">
+        <div class="contact-info">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <div class="contact-details">
+                    <h3>Email</h3>
+                    <p>{{ settings.email }}</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <div class="contact-details">
+                    <h3>Phone</h3>
+                    <p>{{ settings.phone }}</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="contact-details">
+                    <h3>Address</h3>
+                    <p>{{ settings.address }}</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-clock"></i>
+                <div class="contact-details">
+                    <h3>Business Hours</h3>
+                    <p>{{ settings.business_hours }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="map-container">
+            <h3>Find Us</h3>
+            <div class="map-embed">
+                <iframe 
+                    src="{{ settings.map_embed_url }}" 
+                    width="100%" 
+                    height="300" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>

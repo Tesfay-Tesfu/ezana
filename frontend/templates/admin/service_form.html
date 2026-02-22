@@ -1,0 +1,96 @@
+{% extends "admin/admin_base.html" %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>{{ 'Edit Service' if service else 'Add New Service' }}</h1>
+    <a href="{{ url_for('admin_services') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Services
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control" + (' is-invalid' if form.title.errors else ''), placeholder="Service title") }}
+                {% for error in form.title.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ form.subtitle.label(class="form-label") }}
+                {{ form.subtitle(class="form-control" + (' is-invalid' if form.subtitle.errors else ''), placeholder="Short subtitle") }}
+                {% for error in form.subtitle.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-control" + (' is-invalid' if form.description.errors else ''), rows=5, placeholder="Full service description") }}
+                {% for error in form.description.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ form.features.label(class="form-label") }}
+                {{ form.features(class="form-control" + (' is-invalid' if form.features.errors else ''), placeholder="e.g., Feature 1, Feature 2, Feature 3") }}
+                {% for error in form.features.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+                <div class="form-text">Enter features separated by commas.</div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form.box_color.label(class="form-label") }}
+                {{ form.box_color(class="form-control" + (' is-invalid' if form.box_color.errors else ''), type="color") }}
+                {% for error in form.box_color.errors %}
+                    <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <hr>
+            <h5>Service Image</h5>
+            <p class="text-muted small">Provide either an image file or an image URL</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.image.label(class="form-label") }}
+                        {{ form.image(class="form-control" + (' is-invalid' if form.image.errors else '')) }}
+                        {% for error in form.image.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.image_url.label(class="form-label") }}
+                        {{ form.image_url(class="form-control" + (' is-invalid' if form.image_url.errors else ''), placeholder="https://example.com/image.jpg") }}
+                        {% for error in form.image_url.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            {% if service and service.image_url %}
+            <div class="mb-3">
+                <label class="form-label">Current Image</label>
+                <div>
+                    <img src="{{ service.image_url }}" alt="Current" style="max-width: 200px; max-height: 150px; border-radius: 5px; border: 1px solid #ddd;">
+                </div>
+            </div>
+            {% endif %}
+            
+            <hr>
+            <button type="submit" class="btn btn-primary">Save Service</button>
+            <a href="{{ url_for('admin_services') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

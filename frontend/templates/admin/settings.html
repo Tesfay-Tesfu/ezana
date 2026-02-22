@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h1>Site Settings</h1>
+    <form method="POST">
+        {% for key, value in settings.items() %}
+        <div class="form-group">
+            <label for="{{ key }}">{{ key|replace('_', ' ')|title }}</label>
+            <input type="text" class="form-control" id="{{ key }}" name="{{ key }}" value="{{ value }}">
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn">Save Settings</button>
+    </form>
+</div>
+{% endblock %}

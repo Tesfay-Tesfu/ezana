@@ -1,0 +1,39 @@
+<header class="bg-dark text-white py-3">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo d-flex align-items-center">
+                <img src="https://raw.githubusercontent.com/Tesfay-Tesfu/Mella-Technollogy-LLC-Python-Course/main/Gere_Logo2.png" 
+                     alt="Ezana Services Logo" style="height: 85px; width: auto; margin-right: 10px;">
+                <div class="logo-text d-flex flex-column">
+                    <span class="fs-3 fw-bold lh-1">{{ settings.company_name }}</span>
+                    <span class="amharic-subtitle text-warning small mt-1">ኢዛና ሰርቪስ</span>
+                </div>
+            </div>
+            
+            <!-- Professional Hamburger Button (White) -->
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <!-- Navigation Menu -->
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="{{ url_for('services') }}" class="nav-link">Services</a></li>
+                    <li class="nav-item"><a href="{{ url_for('booking') }}" class="nav-link">Book Services</a></li>
+                    <li class="nav-item"><a href="{{ url_for('reviews') }}" class="nav-link">Reviews</a></li>
+                    <li class="nav-item"><a href="{{ url_for('index') }}#contact" class="nav-link">Contact</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a href="{{ url_for('admin_dashboard') }}" class="nav-link">Admin</a></li>
+                    <li class="nav-item"><a href="{{ url_for('admin_logout') }}" class="nav-link">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<!-- Overlay for mobile menu -->
+<div class="menu-overlay" id="menuOverlay"></div>

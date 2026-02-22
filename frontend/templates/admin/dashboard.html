@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h1>Admin Dashboard</h1>
+    <nav class="admin-nav">
+        <a href="{{ url_for('admin_services') }}">Manage Services</a>
+        <a href="{{ url_for('admin_bookings') }}">View Bookings</a>
+        <a href="{{ url_for('admin_reviews') }}">Manage Reviews</a>
+        <a href="{{ url_for('admin_faqs') }}">Manage FAQs</a>
+        <a href="{{ url_for('admin_policies') }}">Manage Policies</a>
+        <a href="{{ url_for('admin_links') }}">Manage Useful Links</a>
+        <a href="{{ url_for('admin_settings') }}">Site Settings</a>
+        <a href="{{ url_for('admin_logout') }}">Logout</a>
+    </nav>
+
+    <div class="stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0;">
+        <div class="stat-card" style="background: var(--primary); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h3>Total Services</h3>
+            <p style="font-size: 2rem;">{{ service_count }}</p>
+        </div>
+        <div class="stat-card" style="background: var(--secondary); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h3>Total Bookings</h3>
+            <p style="font-size: 2rem;">{{ booking_count }}</p>
+        </div>
+        <div class="stat-card" style="background: var(--primary); color: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
+            <h3>Pending Reviews</h3>
+            <p style="font-size: 2rem;">{{ pending_reviews }}</p>
+        </div>
+    </div>
+
+    <h2>Recent Bookings</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Services</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in recent_bookings %}
+            <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.full_name }}</td>
+                <td>{{ booking.email }}</td>
+                <td>{{ booking.services|join(', ') }}</td>
+                <td>{{ booking.created_at.strftime('%Y-%m-%d') }}</td>
+                <td>{{ booking.status }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No recent bookings.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

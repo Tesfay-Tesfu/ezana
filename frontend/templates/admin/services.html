@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h1>Manage Services</h1>
+    <a href="{{ url_for('admin_service_new') }}" class="btn" style="margin-bottom: 1rem;">Add New Service</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Subtitle</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.id }}</td>
+                <td>{{ service.title }}</td>
+                <td>{{ service.subtitle }}</td>
+                <td>
+                    {% if service.image_url %}
+                        <img src="{{ service.image_url }}" width="50" height="50" style="object-fit: cover; border-radius: 5px;">
+                    {% else %}
+                        No image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('admin_service_edit', id=service.id) }}" class="btn" style="padding: 5px 10px;">Edit</a>
+                    <form action="{{ url_for('admin_service_delete', id=service.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn" style="background: #dc3545; color: white; padding: 5px 10px;" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No services yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

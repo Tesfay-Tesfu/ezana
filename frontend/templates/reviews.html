@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-5">Client Reviews</h2>
+    
+    <!-- Review Form -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Leave a Review</h4>
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.client_name.label(class="form-label") }}
+                            {{ form.client_name(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.rating.label(class="form-label") }}
+                            <div class="rating">
+                                {% for i in range(5,0,-1) %}
+                                <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" {% if form.rating.data == i %}checked{% endif %}>
+                                <label for="star{{ i }}"><i class="fas fa-star"></i></label>
+                                {% endfor %}
+                            </div>
+                            {% for error in form.rating.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.comment.label(class="form-label") }}
+                            {{ form.comment(class="form-control", rows=4) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display Approved Reviews -->
+    <h3 class="mb-4">What Our Clients Say</h3>
+    <div class="row">
+        {% for review in reviews %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="card-title mb-0">{{ review.client_name }}</h5>
+                        <div class="text-warning">
+                            {% for i in range(5) %}
+                                {% if i < review.rating %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="card-text">{{ review.comment }}</p>
+                    <small class="text-muted">{{ review.created_at.strftime('%B %d, %Y') }}</small>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center">No reviews yet. Be the first to leave one!</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+.rating input {
+    display: none;
+}
+.rating label {
+    font-size: 2rem;
+    padding: 0 0.1rem;
+    cursor: pointer;
+    color: #ddd;
+}
+.rating label:hover,
+.rating label:hover ~ label,
+.rating input:checked ~ label {
+    color: #ffc107;
+}
+</style>
+{% endblock %}

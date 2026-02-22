@@ -1,0 +1,69 @@
+{% extends "admin/admin_base.html" %}
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Blocked Dates</h1>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Block a New Date</h5>
+        <form method="POST" action="{{ url_for('admin_blocked_date_add') }}">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="date" name="date" class="form-control" required min="{{ now().strftime('%Y-%m-%d') }}">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" name="reason" class="form-control" placeholder="Reason (optional)">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Block Date</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if blocked %}
+<div class="alert alert-info">
+    <strong>Note:</strong> Blocked dates will appear as unavailable in the booking form and cannot be selected.
+</div>
+{% endif %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Reason</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in blocked %}
+        <tr>
+            <td><strong>{{ b.date.strftime('%Y-%m-%d') }}</strong></td>
+            <td>{{ b.reason or '-' }}</td>
+            <td>
+                <form action="{{ url_for('admin_blocked_date_delete', id=b.id) }}" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Unblock this date? It will become available for booking.')">
+                        <i class="fas fa-trash"></i> Unblock
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" class="text-center">
+                <div class="py-4">
+                    <i class="fas fa-calendar-check fa-3x text-muted mb-3"></i>
+                    <p class="lead">No blocked dates yet.</p>
+                    <p>Use the form above to block dates that should not be available for booking.</p>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
